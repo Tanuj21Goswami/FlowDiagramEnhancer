@@ -48,9 +48,6 @@ const FlowDiagram = () => {
   
   
   
-  
-  
-  
 
   const equispaceParallelNodes = useCallback(() => {
     const branchNodes = {};
@@ -105,9 +102,6 @@ const FlowDiagram = () => {
       console.log('Cannot connect nodes from different branches.');
     }
   }, [nodes, edges, setEdges]);
-  
-  
-  
   
 
   const onConnect1 = useCallback((params) => {
@@ -195,7 +189,7 @@ const FlowDiagram = () => {
 
   return (
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <div style={{ justifyContent: 'space-evenly', padding: '15px' }}>
+      <div style={{ justifyContent: 'space-evenly', padding: '10px' }}>
         <button onClick={equispaceParallelNodes}>Equispace Parallel Nodes</button>
         <button onClick={undo}>Undo</button>
         <button onClick={redo}>Redo</button>
@@ -203,6 +197,7 @@ const FlowDiagram = () => {
         <button onClick={() => addNode('iconNode')}>Add ICON Node</button>
         <button onClick={() => addNode('imageNode')}>Add Image Node</button>
         <button onClick={() => addNode('default')}>Add Default Node</button>
+
       </div>
       <div ref={reactFlowWrapper} style={{ height: '100vh' }}>
         <ReactFlow
