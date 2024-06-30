@@ -36,6 +36,14 @@ const FlowDiagram = () => {
         }
       };
   
+      // Check if it's the last node of the branch
+      const branchNodes = nodes.filter(node => node.data?.branch === newNode.data.branch);
+      if (branchNodes.length === 0 || branchNodes[branchNodes.length - 1].id === newNode.id) {
+        newNode.data.parallelEnd = true;
+      } else {
+        newNode.data.parallelEnd = false;
+      }
+  
       if (type === 'imageNode') {
         newNode.data.imageUrl = myImage;
       }
@@ -62,7 +70,7 @@ const FlowDiagram = () => {
         branchNodes[branch].push(node);
       }
     });
-
+  
     // Calculate new positions
     const updatedNodes = nodes.map(node => {
       const branch = node.data?.branch;
@@ -72,7 +80,7 @@ const FlowDiagram = () => {
       const spacing = 150; // Customize this spacing value as needed
       const startX = 100; // Starting X position for the first node in the branch
       const startY = 100; // Starting Y position for the first node in the branch
-
+  
       const nodeIndex = nodesInBranch.indexOf(node);
       return {
         ...node,
@@ -82,10 +90,35 @@ const FlowDiagram = () => {
         }
       };
     });
-
-    pushToHistory(updatedNodes, edges);
-    setNodes(updatedNodes);
+  
+    // Label the last node in each branch with a unique branch ID and "Parallel End"
+    const branchEndNodes = {};
+    updatedNodes.forEach(node => {
+      const branch = node.data?.branch;
+      if (branch && branchNodes[branch] && node === branchNodes[branch][branchNodes[branch].length - 1]) {
+        branchEndNodes[node.id] = {
+          ...node,
+          data: {
+            ...node.data,
+            label: `${node.data.label} (${branch})`,
+            branchEnd: true
+          }
+        };
+      }
+    });
+  
+    // Merge branch end nodes into updated nodes
+    const finalNodes = updatedNodes.map(node => {
+      if (branchEndNodes[node.id]) {
+        return branchEndNodes[node.id];
+      }
+      return node;
+    });
+  
+    pushToHistory(finalNodes, edges);
+    setNodes(finalNodes);
   }, [nodes, edges, pushToHistory, setNodes]);
+  
 
   const onConnect = useCallback((params) => {
     const { source, target } = params;
