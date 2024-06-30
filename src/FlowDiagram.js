@@ -23,27 +23,33 @@ const FlowDiagram = () => {
   }, [history, currentHistoryIndex, setHistory, setCurrentHistoryIndex]);
 
   const addNode = useCallback((type) => {
-    let newNode = {
-      id: `node_${nodeIdRef.current++}`,
-      type,
-      position: { x: Math.random() * window.innerWidth * 0.5, y: Math.random() * window.innerHeight * 0.5 },
-    };
+    const branchNumber = prompt(`Enter branch number for ${type} node:`); // Example prompt, replace with your UI logic
   
-    if (type === 'circular' || type === 'iconNode' || type === 'imageNode') {
-      newNode.data = { label: `${type.charAt(0).toUpperCase() + type.slice(1)} Node ${nodeIdRef.current}` };
+    if (branchNumber) {
+      let newNode = {
+        id: `node_${nodeIdRef.current++}`,
+        type,
+        position: { x: Math.random() * window.innerWidth * 0.5, y: Math.random() * window.innerHeight * 0.5 },
+        data: {
+          label: `${type.charAt(0).toUpperCase() + type.slice(1)} Node ${nodeIdRef.current}`,
+          branch: `branch_${branchNumber}`
+        }
+      };
+  
       if (type === 'imageNode') {
         newNode.data.imageUrl = myImage;
       }
-      // Assign branch if it's the start of a new branch
-      newNode.data.branch = `branch_${newNode.id}`;
-    } else {
-      newNode.data = { label: `${type.charAt(0).toUpperCase() + type.slice(1)} Node ${nodeIdRef.current}` };
-    }
   
-    const newNodes = [...nodes, newNode];
-    pushToHistory(newNodes, edges);
-    setNodes(newNodes);
+      const newNodes = [...nodes, newNode];
+      pushToHistory(newNodes, edges);
+      setNodes(newNodes);
+    }
   }, [nodes, edges, pushToHistory, setNodes]);
+  
+  
+  
+  
+  
   
 
   const equispaceParallelNodes = useCallback(() => {
@@ -91,44 +97,18 @@ const FlowDiagram = () => {
   
     let updatedNodes = [...nodes]; // Clone the current nodes array
   
-    // Check if the source node is circular, indicating the potential start of a new branch
-    // Or if the source node already belongs to a branch
-    if (sourceNode.type === 'circular' || sourceNode.data.branch) {
-      let branchName;
-  
-      // If the source node is circular and starting a new branch
-      if (sourceNode.type === 'circular') {
-        branchName = `branch_${source}`;
-        // Also, update the source node to mark it as the start of a new branch if necessary
-        updatedNodes = updatedNodes.map(node => node.id === source ? { ...node, data: { ...node.data, branch: branchName, label: `${node.data.label} (Branch: ${branchName})` }} : node);
-      } else {
-        // Propagate the existing branch name from the source node
-        branchName = sourceNode.data.branch;
-      }
-  
-      // Assign or propagate the branch to the target node
-      updatedNodes = updatedNodes.map(node => {
-        if (node.id === target && (!targetNode.data.branch || targetNode.data.branch !== branchName)) {
-          return {
-            ...node,
-            data: {
-              ...node.data,
-              branch: branchName, // Assign the branch name
-              label: `${node.data.label} (Branch: ${branchName})` // Add branch info to the label for visualization
-            },
-          };
-        }
-        return node;
-      });
-  
-      // Update the nodes state with the new branch information
-      setNodes(updatedNodes);
+    // Check if the source node and target node have the same branch
+    if (sourceNode.data.branch === targetNode.data.branch) {
+      // Proceed with adding the edge if the connection is valid
+      setEdges(eds => [...eds, { id: `e${source}-${target}`, ...params }]);
+    } else {
+      console.log('Cannot connect nodes from different branches.');
     }
+  }, [nodes, edges, setEdges]);
   
-    // Proceed with adding the edge if the connection is valid
-    setEdges(eds => [...eds, { id: `e${source}-${target}`, ...params }]);
-    console.log(nodes)
-  }, [nodes, edges, setEdges, setNodes]);
+  
+  
+  
 
   const onConnect1 = useCallback((params) => {
     const { source, target } = params;
@@ -215,7 +195,7 @@ const FlowDiagram = () => {
 
   return (
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <div style={{ justifyContent: 'space-evenly', padding: '10px' }}>
+      <div style={{ justifyContent: 'space-evenly', padding: '15px' }}>
         <button onClick={equispaceParallelNodes}>Equispace Parallel Nodes</button>
         <button onClick={undo}>Undo</button>
         <button onClick={redo}>Redo</button>

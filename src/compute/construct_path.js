@@ -20,7 +20,6 @@ function constructPaths(currentNode, path = [], branch = null) {
   // Accumulate paths from all next nodes
   let paths = [];
   nextNodes.forEach(nextNode => {
-    const edge = edges.find(edge => edge.source === currentNode && edge.target === nextNode);
     const nextNodeData = nodes.find(node => node.id === nextNode);
     const nextBranch = nextNodeData.data.branch || branch; // Use the current branch or propagate the branch
 
