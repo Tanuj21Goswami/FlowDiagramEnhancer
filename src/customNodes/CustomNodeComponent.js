@@ -27,16 +27,12 @@ const CustomNodeComponent = ({ data }) => {
       )}
 
       {/* Display "Parallel End" tag if it's the end of a parallel branch */}
-      {isParallelEnd && (
-        <span style={{
-          position: 'absolute',
-          bottom: '-20px', // Adjust positioning as needed
-          fontSize: '10px',
-          color: '#888',
-        }}>
-          Parallel End
-        </span>
-      )}
+      {data.parallelEnd && (
+  <span style={{ position: 'absolute', bottom: '-20px', fontSize: '10px', color: '#888' }}>
+    Parallel End
+  </span>
+)}
+
     </div>
   );
 };

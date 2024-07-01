@@ -59,7 +59,7 @@ const FlowDiagram = () => {
 
   const equispaceParallelNodes = useCallback(() => {
     const branchNodes = {};
-    
+  
     // Group nodes by branch
     nodes.forEach(node => {
       const branch = node.data?.branch;
@@ -71,53 +71,52 @@ const FlowDiagram = () => {
       }
     });
   
-    // Calculate new positions
+    // Calculate new positions and mark the last node in each branch as parallel end
     const updatedNodes = nodes.map(node => {
       const branch = node.data?.branch;
       if (!branch || !branchNodes[branch]) return node;
-      
-      const nodesInBranch = branchNodes[branch];
-      const spacing = 150; // Customize this spacing value as needed
-      const startX = 100; // Starting X position for the first node in the branch
-      const startY = 100; // Starting Y position for the first node in the branch
   
-      const nodeIndex = nodesInBranch.indexOf(node);
+      const nodesInBranch = branchNodes[branch];
+      const isLastNode = node === nodesInBranch[nodesInBranch.length - 1];
+  
       return {
         ...node,
         position: {
-          x: startX + nodeIndex * spacing,
-          y: startY + nodeIndex * spacing
-        }
+          x: isLastNode ? node.position.x : Math.random() * window.innerWidth * 0.5,
+          y: isLastNode ? node.position.y : Math.random() * window.innerHeight * 0.5,
+        },
+        data: {
+          ...node.data,
+          parallelEnd: isLastNode,
+        },
       };
     });
   
-    // Label the last node in each branch with a unique branch ID and "Parallel End"
-    const branchEndNodes = {};
-    updatedNodes.forEach(node => {
-      const branch = node.data?.branch;
-      if (branch && branchNodes[branch] && node === branchNodes[branch][branchNodes[branch].length - 1]) {
-        branchEndNodes[node.id] = {
-          ...node,
-          data: {
-            ...node.data,
-            label: `${node.data.label} (${branch})`,
-            branchEnd: true
-          }
-        };
-      }
-    });
-  
-    // Merge branch end nodes into updated nodes
-    const finalNodes = updatedNodes.map(node => {
-      if (branchEndNodes[node.id]) {
-        return branchEndNodes[node.id];
-      }
-      return node;
-    });
-  
-    pushToHistory(finalNodes, edges);
-    setNodes(finalNodes);
+    pushToHistory(updatedNodes, edges);
+    setNodes(updatedNodes);
   }, [nodes, edges, pushToHistory, setNodes]);
+
+  // Example function to handle node deletion
+const deleteNode = useCallback((nodeId) => {
+  const updatedNodes = nodes.filter(node => node.id !== nodeId);
+  
+  // Check if the deleted node was marked as parallelEnd
+  const index = updatedNodes.findIndex(node => node.id === nodeId);
+  if (index > 0 && updatedNodes[index - 1].data?.branch === updatedNodes[index].data?.branch) {
+    updatedNodes[index - 1] = {
+      ...updatedNodes[index - 1],
+      data: {
+        ...updatedNodes[index - 1].data,
+        parallelEnd: true,
+      },
+    };
+  }
+  
+  // Update state and history
+  pushToHistory(updatedNodes, edges);
+  setNodes(updatedNodes);
+}, [nodes, edges, pushToHistory, setNodes]);
+
   
 
   const onConnect = useCallback((params) => {
