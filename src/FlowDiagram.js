@@ -9,6 +9,7 @@ import CircularNode from './customNodes/CircularNode';
 import CustomNodeComponent from './customNodes/CustomNodeComponent';
 import IconNode from './customNodes/IconNode';
 import myImage from './logo_1.png';
+import './FlowDiagram.css';
 
 const FlowDiagram = () => {
   const {
@@ -194,20 +195,20 @@ const deleteNode = useCallback((nodeId) => {
   }, [nodes, edges, setEdges, setNodes]);
   
 
-  const onNodeDragStop = useCallback(debounce((event, node) => {
-    const newNodes = nodes.map((nd) => {
-      if (nd.id === node.id) {
-        return {
-          ...nd,
-          position: node.position,
-        };
-      }
-      return nd;
-    });
-    pushToHistory(newNodes, edges);
-    setNodes(newNodes);
-  }, 300), [nodes, edges, pushToHistory]); // Adjust the debounce delay (300ms) as needed
-  
+const onNodeDragStop = useCallback(debounce((event, node) => {
+  const newNodes = nodes.map((nd) => {
+    if (nd.id === node.id) {
+      return {
+        ...nd,
+        position: node.position,
+      };
+    }
+    return nd;
+  });
+  pushToHistory(newNodes, edges);
+  setNodes(newNodes);
+}, 300), [nodes, edges, pushToHistory]); // Adjust the debounce delay (300ms) as needed
+
 
   const makeNodesEquispacedAndCentered = useCallback(() => {
     if (!reactFlowWrapper.current) return;
@@ -267,42 +268,44 @@ const deleteNode = useCallback((nodeId) => {
   
 
   return (
-    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <div style={{ justifyContent: 'space-evenly', padding: '10px' }}>
-        <button onClick={equispaceParallelNodes}>Equispace Parallel Nodes</button>
-        <button onClick={undo}>Undo</button>
-        <button onClick={redo}>Redo</button>
-        <button onClick={() => addNode('circular')}>Add Circular Node</button>
-        <button onClick={() => addNode('iconNode')}>Add ICON Node</button>
-        <button onClick={() => addNode('imageNode')}>Add Image Node</button>
-        <button onClick={() => addNode('default')}>Add Default Node</button>
-
+    <div className="flow-diagram-container">
+      <div className="controls-container">
+        <button style={{ backgroundColor: 'orange', color: 'white' }} onClick={equispaceParallelNodes}>Equispace Parallel Nodes</button>
+        <div className="undo-redo">
+          <button style={{ backgroundColor: 'blue', color: 'white' }} onClick={undo}>Undo</button>
+          <button style={{ backgroundColor: 'green', color: 'white' }} onClick={redo}>Redo</button>
+        </div>
+        <div className="node-buttons">
+          <button style={{ backgroundColor: 'purple', color: 'white' }} onClick={() => addNode('circular')}>Add Circular Node</button>
+          <button style={{ backgroundColor: 'teal', color: 'white' }} onClick={() => addNode('iconNode')}>Add ICON Node</button>
+          <button style={{ backgroundColor: 'red', color: 'white' }} onClick={() => addNode('imageNode')}>Add Image Node</button>
+          <button style={{ backgroundColor: 'gray', color: 'white' }} onClick={() => addNode('default')}>Add Default Node</button>
+        </div>
       </div>
-      <div ref={reactFlowWrapper} style={{ height: '100vh' }}>
+      <div className="flow-diagram" ref={reactFlowWrapper}>
         <ReactFlow
           nodes={nodes}
           edges={edges}
-          onConnect={onConnect}
           nodeTypes={nodeTypes}
+          onConnect={onConnect}
           onNodeDragStop={onNodeDragStop}
         >
           <MiniMap
-              nodeColor={node => {
-                switch (node.type) {
-                  case 'input': return 'red';
-                  case 'output': return 'blue';
-                  case 'default': return 'gray';
-                  default: return '#00ff00';
-                }
-              }}
-              nodeStrokeWidth={3}
-            />
-
+            nodeColor={node => {
+              switch (node.type) {
+                case 'input': return 'red';
+                case 'output': return 'blue';
+                case 'default': return 'gray';
+                default: return '#00ff00';
+              }
+            }}
+            nodeStrokeWidth={3}
+          />
           <Controls />
         </ReactFlow>
       </div>
     </div>
   );
-};
+};  
 
 export default FlowDiagram;

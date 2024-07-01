@@ -1,0 +1,19 @@
+.flow-diagram-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .controls-container {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 10px;
+  }
+  
+  .flow-diagram {
+    height: calc(100vh - 40px); /* Adjust for control button height */
+    position: relative;
+  }
+  
+  /* Add more custom styling as needed */
+  
