@@ -6,7 +6,7 @@ import NodeControl from './NodeControl';
 function App() {
   return (
     <FlowProvider>
-      <NodeControl />
+      {/* <NodeControl /> */}
       <FlowDiagram />
     </FlowProvider>
   );

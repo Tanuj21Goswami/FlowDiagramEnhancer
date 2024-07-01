@@ -1,0 +1,36 @@
+/* NodeControl.css */
+
+.node-control-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  .node-control-container button {
+    padding: 10px 20px;
+    margin-right: 10px;
+    background-color: #007bff; /* Blue color, adjust as needed */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .node-control-container button:hover {
+    background-color: #0056b3; /* Darker shade of blue on hover, adjust as needed */
+  }
+  
+  .node-control-container input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    flex: 1; /* Take remaining space */
+    margin-right: 10px;
+  }
+  
+  .node-control-container input:focus {
+    outline: none;
+    border-color: #007bff; /* Blue color on focus, adjust as needed */
+  }
+  

@@ -270,17 +270,17 @@ const onNodeDragStop = useCallback(debounce((event, node) => {
   return (
     <div className="flow-diagram-container">
       <div className="controls-container">
-        <button style={{ backgroundColor: 'orange', color: 'white' }} onClick={equispaceParallelNodes}>Equispace Parallel Nodes</button>
+        <button className="action-button" onClick={equispaceParallelNodes}>Equispace Parallel Nodes</button>
         <div className="undo-redo">
-          <button style={{ backgroundColor: 'blue', color: 'white' }} onClick={undo}>Undo</button>
-          <button style={{ backgroundColor: 'green', color: 'white' }} onClick={redo}>Redo</button>
+          <button className="control-button" onClick={undo}>Undo</button>
+          <button className="control-button" onClick={redo}>Redo</button>
         </div>
-        <div className="node-buttons">
-          <button style={{ backgroundColor: 'purple', color: 'white' }} onClick={() => addNode('circular')}>Add Circular Node</button>
-          <button style={{ backgroundColor: 'teal', color: 'white' }} onClick={() => addNode('iconNode')}>Add ICON Node</button>
-          <button style={{ backgroundColor: 'red', color: 'white' }} onClick={() => addNode('imageNode')}>Add Image Node</button>
-          <button style={{ backgroundColor: 'gray', color: 'white' }} onClick={() => addNode('default')}>Add Default Node</button>
-        </div>
+      </div>
+      <div className="node-buttons">
+        <button className="node-button" onClick={() => addNode('circular')}>Add Circular Node</button>
+        <button className="node-button" onClick={() => addNode('iconNode')}>Add ICON Node</button>
+        <button className="node-button" onClick={() => addNode('imageNode')}>Add Image Node</button>
+        <button className="node-button" onClick={() => addNode('default')}>Add Default Node</button>
       </div>
       <div className="flow-diagram" ref={reactFlowWrapper}>
         <ReactFlow
@@ -306,6 +306,6 @@ const onNodeDragStop = useCallback(debounce((event, node) => {
       </div>
     </div>
   );
-};  
+};
 
 export default FlowDiagram;

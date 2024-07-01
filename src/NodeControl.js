@@ -1,6 +1,7 @@
-// NodeControl.js
+// NodeControl.jsx
 import React, { useState } from 'react';
 import { useFlow } from './FlowContext';
+import './NodeControl.css'; // Import the CSS file
 
 const NodeControl = () => {
   const { addNode, deleteNode, nodes } = useFlow();
@@ -36,7 +37,7 @@ const NodeControl = () => {
   };
 
   return (
-    <div>
+    <div className="node-control-container">
       <button onClick={handleAddNode}>Add Node</button>
       <input
         type="text"

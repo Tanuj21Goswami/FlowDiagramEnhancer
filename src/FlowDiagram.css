@@ -1,19 +1,69 @@
+/* FlowDiagram.css */
+
 .flow-diagram-container {
-    height: 100vh;
+    height: 200vh;
     display: flex;
     flex-direction: column;
+    padding: 10px;
   }
   
   .controls-container {
     display: flex;
-    justify-content: space-evenly;
-    padding: 10px;
+    justify-content: space-between; /* Aligns buttons at both ends */
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .undo-redo {
+    display: flex;
+    gap: 10px; /* Adds space between undo and redo buttons */
+  }
+  
+  .node-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .action-button, .control-button, .node-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .action-button {
+    background-color: orange;
+    color: white;
+  }
+  
+  .control-button, .node-button {
+    background-color: blue;
+    color: white;
+  }
+  
+  .control-button {
+    background-color: green;
+  }
+  
+  .node-button {
+    background-color: purple;
+  }
+  
+  .action-button:hover, .control-button:hover, .node-button:hover {
+    opacity: 0.8;
   }
   
   .flow-diagram {
-    height: calc(100vh - 40px); /* Adjust for control button height */
-    position: relative;
+    height: calc(100vh - 60px); /* Adjust to leave space for controls */
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
-  
-  /* Add more custom styling as needed */
   
