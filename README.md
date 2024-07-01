@@ -1,70 +1,94 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+# Flow Diagram Enhancer Project
 
-In the project directory, you can run:
+This project implements a flow diagram with custom node types, equispacing of nodes, undo/redo functionality, and node addition/deletion. The project is built using React and the `react-flow-renderer` library.
 
-### `npm start`
+## Table of Contents
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- [Installation](#installation)
+- [Setup](#setup)
+- [Running the Application](#running-the-application)
+- [Functionality Overview](#functionality-overview)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Installation
 
-### `npm test`
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/Tanuj21Goswami/FlowDiagramEnhancer.git
+   ```
+2. **Checkout the Master Branch**
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+3. **Install Dependencies**:
+   Make sure you have [Node.js](https://nodejs.org/) installed. Then, run the following command to install the necessary dependencies:
+   ```bash
+   npm install
+   ```
 
-### `npm run build`
+## Setup
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. **Create a `.env` file**:
+   Create a `.env` file in the root directory of the project to store any environment variables required. For this project, no specific environment variables are needed.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+2. **Start the Development Server**:
+   ```bash
+   npm start
+   ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+   This will start the application and open it in your default web browser at `http://localhost:3000`.
 
-### `npm run eject`
+## Running the Application
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+To run the application locally, use the following command:
+```bash
+npm start
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+This will start the development server and the application will be accessible at `http://localhost:3000`.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Functionality Overview
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### 1. **Custom Nodes**
 
-## Learn More
+The application includes custom nodes such as:
+- **Circular Nodes**
+- **Icon Nodes**
+- **Image Nodes**
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Each node type can be added to the diagram using the provided buttons in the UI.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### 2. **Equispacing of Parallel Nodes**
 
-### Code Splitting
+Nodes can be evenly spaced out in the diagram by clicking the "Equispace Parallel Nodes" button. This ensures that nodes are arranged neatly and without overlap.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### 3. **Undo/Redo Functionality**
 
-### Analyzing the Bundle Size
+The application supports undo and redo functionality through the keyboard also:
+- **Undo**: Reverts the last change.
+- **Redo**: Reapplies the last undone change.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### 4. **Node Addition and Deletion**
 
-### Making a Progressive Web App
+Nodes can be added to the diagram using the provided buttons. Each node is assigned a branch number by the user.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Nodes can also be deleted by entering the node ID and clicking the "Delete Node" button.
 
-### Advanced Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### 6. **Maintaining Parallel End Tags**
 
-### Deployment
+Nodes are labeled with unique IDs and a 'Parallel End' tag to maintain clarity in the flow diagram. This ensures that each branch is distinct and easily identifiable.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### 7. **User-Defined Branch Numbers**
 
-### `npm run build` fails to minify
+Users can decide the branch number before adding any node. This functionality allows for more control over the organization of nodes within the flow diagram.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### 8. **Branch Restriction**
+
+Nodes of different branches cannot be joined together to maintain clarity in the diagram. This restriction helps in keeping the diagram organized and prevents confusion.
+
+
+
+## Conclusion
+
+This project demonstrates a comprehensive flow diagram application with various features for managing nodes and edges. The application is designed to be intuitive and user-friendly, allowing for easy manipulation and visualization of flow diagrams.
+
