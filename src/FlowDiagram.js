@@ -1,6 +1,9 @@
+import { useEffect } from 'react';
 import React, { useCallback, useRef } from 'react';
 import ReactFlow, { MiniMap, Controls } from 'react-flow-renderer';
 import { useFlow } from './FlowContext';
+import { debounce } from 'lodash';
+
 import ImageNode from './customNodes/ImageNode';
 import CircularNode from './customNodes/CircularNode';
 import CustomNodeComponent from './customNodes/CustomNodeComponent';
@@ -191,7 +194,7 @@ const deleteNode = useCallback((nodeId) => {
   }, [nodes, edges, setEdges, setNodes]);
   
 
-  const onNodeDragStop = useCallback((event, node) => {
+  const onNodeDragStop = useCallback(debounce((event, node) => {
     const newNodes = nodes.map((nd) => {
       if (nd.id === node.id) {
         return {
@@ -203,7 +206,8 @@ const deleteNode = useCallback((nodeId) => {
     });
     pushToHistory(newNodes, edges);
     setNodes(newNodes);
-  }, [nodes, edges, pushToHistory]);
+  }, 300), [nodes, edges, pushToHistory]); // Adjust the debounce delay (300ms) as needed
+  
 
   const makeNodesEquispacedAndCentered = useCallback(() => {
     if (!reactFlowWrapper.current) return;
@@ -219,6 +223,9 @@ const deleteNode = useCallback((nodeId) => {
     console.log(updatedNodes);
   }, [nodes, edges, pushToHistory]);
 
+
+  
+  
   const undo = useCallback(() => {
     if (currentHistoryIndex === 0) return;
     const newIndex = currentHistoryIndex - 1;
@@ -227,7 +234,7 @@ const deleteNode = useCallback((nodeId) => {
     setNodes(prevState.nodes);
     setEdges(prevState.edges);
   }, [history, currentHistoryIndex]);
-
+  
   const redo = useCallback(() => {
     if (currentHistoryIndex >= history.length - 1) return;
     const newIndex = currentHistoryIndex + 1;
@@ -236,7 +243,21 @@ const deleteNode = useCallback((nodeId) => {
     setNodes(nextState.nodes);
     setEdges(nextState.edges);
   }, [history, currentHistoryIndex]);
-
+  
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.ctrlKey && event.key === 'z') {
+        undo();
+      } else if (event.ctrlKey && event.key === 'y') {
+        redo();
+      }
+    };
+  
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [undo, redo]);
   const nodeTypes = {
     customNodeType: CustomNodeComponent,
     circular: CircularNode,
@@ -265,7 +286,18 @@ const deleteNode = useCallback((nodeId) => {
           nodeTypes={nodeTypes}
           onNodeDragStop={onNodeDragStop}
         >
-          <MiniMap />
+          <MiniMap
+              nodeColor={node => {
+                switch (node.type) {
+                  case 'input': return 'red';
+                  case 'output': return 'blue';
+                  case 'default': return 'gray';
+                  default: return '#00ff00';
+                }
+              }}
+              nodeStrokeWidth={3}
+            />
+
           <Controls />
         </ReactFlow>
       </div>
