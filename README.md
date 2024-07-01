@@ -61,7 +61,7 @@ Each node type can be added to the diagram using the provided buttons in the UI.
 
 Nodes can be evenly spaced out in the diagram by clicking the "Equispace Parallel Nodes" button. This ensures that nodes are arranged neatly and without overlap.
 
-![alt text](src\images\image-1.png)
+![alt text](src/images/image-1.png)
 
 ### 3. **Undo/Redo Functionality**
 
@@ -80,14 +80,14 @@ Nodes can also be deleted by entering the node ID and clicking the "Delete Node"
 
 Nodes are labeled with unique IDs and a 'Parallel End' tag to maintain clarity in the flow diagram. This ensures that each branch is distinct and easily identifiable.
 
-![alt text](src\images\image-2.png)
+![alt text](src/images/image-2.png)
 
 ### 7. **User-Defined Branch Numbers**
 
 Users can decide the branch number before adding any node. This functionality allows for more control over the organization of nodes within the flow diagram.
 
 
-![alt text](src\images\image.png)
+![alt text](src/images/image.png)
 
 ### 8. **Branch Restriction**
 
