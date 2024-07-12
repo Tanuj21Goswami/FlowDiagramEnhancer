@@ -1,0 +1,16 @@
+/* FlowDiagram.css */
+.container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .button-container {
+    justify-content: space-evenly;
+    padding: 10px;
+  }
+  
+  .flow-wrapper {
+    height: 100vh;
+  }
+  
