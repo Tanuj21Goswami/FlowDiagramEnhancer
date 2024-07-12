@@ -1,7 +1,7 @@
 import React, { useCallback, useRef } from 'react';
 import ReactFlow from 'react-flow-renderer';
 import { MiniMap, Controls } from 'react-flow-renderer';
-
+import { useEffect } from 'react';
 import { useFlow } from './FlowContext';
 import ImageNode from './customNodes/ImageNode';
 import CircularNode from './customNodes/CircularNode';
@@ -181,6 +181,21 @@ const FlowDiagram = () => {
     setNodes(nextState.nodes);
     setEdges(nextState.edges);
   }, [history, currentHistoryIndex]);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.ctrlKey && event.key === 'z') {
+        undo();
+      } else if (event.ctrlKey && event.key === 'y') {
+        redo();
+      }
+    };
+  
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [undo, redo]);
 
   const nodeTypes = {
     customNodeType: CustomNodeComponent,
