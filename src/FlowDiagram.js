@@ -79,8 +79,11 @@ const FlowDiagram = () => {
         return node;
       });
   
-      // Label the end of parallel branches
-      if (targetNode.type === 'circular') {
+      // Check if the target node has incoming edges
+      const incomingEdges = edges.filter(edge => edge.target === target);
+  
+      if (incomingEdges.length > 1) {
+        // Case where target node has more than 1 incoming edge
         updatedNodes = updatedNodes.map(node => {
           if (node.id === source) {
             return {
@@ -93,12 +96,79 @@ const FlowDiagram = () => {
           }
           return node;
         });
+      } else {
+        // Case where target node has only 1 incoming edge
+        const incomingEdgeSourceNode = nodes.find(n => n.id === incomingEdges[0]?.source);
+        if (incomingEdgeSourceNode) {
+          updatedNodes = updatedNodes.map(node => {
+            if (node.id === incomingEdgeSourceNode.id || node.id === source) {
+              return {
+                ...node,
+                data: {
+                  ...node.data,
+                  label: `${node.data.label} - Parallel End`
+                }
+              };
+            }
+            return node;
+          });
+        }
       }
+  
+      // Function to update branch values recursively from parallel ends upwards
+      const updateBranchValues = (nodeId, newBranch) => {
+        const visited = new Set();
+  
+        const dfs = (currentNodeId, branchValue) => {
+          if (visited.has(currentNodeId)) {
+            return;
+          }
+          visited.add(currentNodeId);
+  
+          const outgoingEdges = edges.filter(edge => edge.source === currentNodeId);
+  
+          // Stop recursion at nodes with more than 1 outgoing edge
+          if (outgoingEdges.length > 1) {
+            return;
+          }
+  
+          // Update the current node's branch
+          updatedNodes = updatedNodes.map(node => {
+            if (node.id === currentNodeId) {
+              return {
+                ...node,
+                data: {
+                  ...node.data,
+                  branch: branchValue
+                }
+              };
+            }
+            return node;
+          });
+  
+          const incomingEdges = edges.filter(edge => edge.target === currentNodeId);
+  
+          incomingEdges.forEach(edge => {
+            dfs(edge.source, branchValue);
+          });
+        };
+  
+        dfs(nodeId, newBranch);
+      };
+  
+      // Update branch values starting from all parallel ends
+      const parallelEnds = updatedNodes.filter(node => node.data.label?.includes('Parallel End'));
+      parallelEnds.forEach((parallelEnd, index) => {
+        updateBranchValues(parallelEnd.id, `branch_${index + 1}`);
+      });
   
       setNodes(updatedNodes);
       setEdges(eds => [...eds, { id: `e${source}-${target}`, ...params }]);
     }
-  }, [nodes, setNodes, setEdges]);
+  }, [nodes, edges, setNodes, setEdges]);
+  
+  
+  
   
 
   const shouldPreventConnection = (sourceNode, targetNode) => {
@@ -132,7 +202,7 @@ const FlowDiagram = () => {
   const makeNodesEquispacedAndCentered = useCallback(() => {
     if (!reactFlowWrapper.current) return;
   
-    const verticalSpacing = 300; // Vertical spacing between levels
+    const verticalSpacing = 200; // Vertical spacing between levels
     const horizontalSpacing = 300; // Minimum horizontal spacing between nodes within the same level
     const containerWidth = reactFlowWrapper.current.offsetWidth;
   
